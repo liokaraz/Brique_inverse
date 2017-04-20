@@ -16,7 +16,7 @@ class Score extends ObjetGraphique {
     this.context.translate(x, y);
     this.context.fillStyle = 'red';
     this.context.font = "30px Arial bold";
-    this.context.fillText("COMBO "+this.comboCount, 0, 0);
+    this.context.fillText("HITS + "+this.comboCount, 0, 0);
     this.context.restore();
   }
 

@@ -112,6 +112,8 @@ class Jeu {
   }
 
   animation(time) {
+    //if(this.brique.length == 0)
+
     this.fps.measureFPS(time);
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.briques.map(brique => {

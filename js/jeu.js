@@ -1,5 +1,4 @@
 class Jeu {
-
   constructor(selecteur, width, height) {
     this.selecteur = selecteur;
     this.briques = [];
@@ -17,6 +16,7 @@ class Jeu {
     this.valTimer = 1000;
     this.gameState;
   }
+
 
   creerCouleur(){
      
@@ -118,9 +118,10 @@ class Jeu {
     this.context.beginPath();
     this.context.translate(60,200);
     this.context.fillStyle = 'white';
-    this.context.font = '50px Arial bold';
+    this.context.font = '20px Arial bold';
     this.context.fillText('YOU LOSE', 0, 0);
     this.context.fillText('SCORE:'+this.score.points, 0, 50);
+    this.context.fillText('RECOMMENCER ?, appuyer sur espace', 0, 100);
     this.context.restore();
     this.animation(time);
   }

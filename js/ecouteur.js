@@ -36,6 +36,8 @@ class Ecouteur {
       case 'ArrowLeft' :
         this.jeu.taquet.v = -1;
         break;
+      case ' ' :
+       this.jeu.init();
     }
   }
 

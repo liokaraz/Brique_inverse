@@ -131,40 +131,35 @@ class Jeu {
   }
 
   animation(time) {
-    console.log(this.briques.length);
-    if(this.briques.length != 0)
-    {
-      this.fps.measureFPS(time);
-      this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-      this.briques.map(brique => {
-        brique.draw();
-      });
-      this.plateau.draw();
-      this.taquet.draw();
-      this.score.draw();
-      this.deplacerBalles();
-      if(this.increment === 200) {
-        let x = Math.random() * this.canvas.width;
-        let y = Math.floor(Math.random() * (this.plateau.y - (this.briques[this.briques.length - 1].y + 30) + 1)  + (this.briques[this.briques.length - 1].y + 30));
-        let rayon = 8;
-        let R = Math.round(255 * Math.random());
-        let G = Math.round(255 * Math.random());
-        let B = Math.round(255 * Math.random());
-        let couleur = "rgb(" + R + "," + G + "," + B +")";
-        let vx = 1 + Math.random() * 3;
-        let vy = 1 + Math.random() * 3;
-        const balle = new Balle(x, y, rayon, this.context, couleur, vx, vy);
-        /* On le mets dans le tableaux de balles */
-        this.balles.push(balle);
-        this.increment = 0;
-      };
-      // tester si la partie est terminer
-      this.partieTerminer();
-      this.increment++;
-	
-      requestAnimationFrame((time) => this.animation(time));
-    }
 
+    this.fps.measureFPS(time);
+    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.briques.map(brique => {
+      brique.draw();
+    });
+    this.plateau.draw();
+    this.taquet.draw();
+    this.score.draw();
+    this.deplacerBalles();
+    if(this.increment === 200) {
+      let x = Math.random() * this.canvas.width;
+      let y = Math.floor(Math.random() * (this.plateau.y - (this.briques[this.briques.length - 1].y + 30) + 1)  + (this.briques[this.briques.length - 1].y + 30));
+      let rayon = 8;
+      let R = Math.round(255 * Math.random());
+      let G = Math.round(255 * Math.random());
+      let B = Math.round(255 * Math.random());
+      let couleur = "rgb(" + R + "," + G + "," + B +")";
+      let vx = 1 + Math.random() * 3;
+      let vy = 1 + Math.random() * 3;
+      const balle = new Balle(x, y, rayon, this.context, couleur, vx, vy);
+      /* On le mets dans le tableaux de balles */
+      this.balles.push(balle);
+      this.increment = 0;
+    };
+    // tester si la partie est terminer
+    this.partieTerminer();
+    this.increment++;
+    requestAnimationFrame((time) => this.animation(time));  
   }
 
 }

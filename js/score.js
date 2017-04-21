@@ -1,7 +1,7 @@
 class Score extends ObjetGraphique {
 
   constructor(context, incrementParam) {
-    super(250, 25, context, 'white', 0, 0);
+    super(200, 25, context, 'white', 0, 0);
     this.points = 0;
     this.comboCount = 0;
     this.increment = incrementParam;

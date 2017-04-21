@@ -15,6 +15,7 @@ class Jeu {
     this.niveauDeJeu =1;
     this.timer =0;
     this.valTimer = 1000;
+    this.gameState;
   }
 
   creerCouleur(){
@@ -111,18 +112,21 @@ class Jeu {
     
   }
 
+  gameOver() {
+    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.context.save();
+    this.context.beginPath();
+    this.context.translate(60,200);
+    this.context.fillStyle = 'white';
+    this.context.font = '50px Arial bold';
+    this.context.fillText('YOU LOSE', 0, 0);
+    this.context.fillText('SCORE:'+this.score.points, 0, 50);
+    this.context.restore();
+    this.animation(time);
+  }
+
   partieTerminer() {
-    if(this.briques.length === 0) {
-      this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-      this.context.save();
-      this.context.beginPath();
-      this.context.translate(this.canvas.width / 2 - 70, this.canvas.height / 2);
-      this.context.fillStyle = 'white';
-      this.context.font = '30px Arial bold';
-      this.context.fillText('Vous avez perdu', 0, 0);
-      this.context.restore();
-      this.animation(time);
-    }
+    if(this.briques.length === 0) this.gameState = 2;
   }
 
 
@@ -140,6 +144,7 @@ class Jeu {
     this.creerBalles(3);
     this.creerTaquet();
     this.increment = 0;
+    this.gameState = 1;
     this.score.draw();
     this.fps = fps;
     const collision = new Collision(this);
@@ -156,22 +161,30 @@ class Jeu {
     this.timer++;
     this.fps.measureFPS(time);
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.briques.map(brique => {
-      brique.draw();
-    });
-    this.plateau.draw();
-    this.taquet.draw();
-    this.score.draw();
-    console.log(this.valTimer + "this.valTimer");
-    
-    this.deplacerBalles();
-    if(this.balles.length < 2 && this.briques.length != 0) {
-     this.creerBalles(3);
-    };
-    // tester si la partie est terminer
-    this.partieTerminer();
-    this.checkNiveau(this.valTimer);
-    this.increment++;
+    switch(jeu.gameState){
+      case 1:
+        this.briques.map(brique => {
+          brique.draw();
+        });
+        this.plateau.draw();
+        this.taquet.draw();
+        this.score.draw();
+        console.log(this.valTimer + "this.valTimer");
+        
+        this.deplacerBalles();
+        if(this.balles.length < 2 && this.briques.length != 0) {
+        this.creerBalles(3);
+        };
+        // tester si la partie est terminer
+        this.partieTerminer();
+        this.checkNiveau(this.valTimer);
+        this.increment++;
+        break;
+      case 2:
+        this.gameOver();
+        break;
+    }
+
    
     requestAnimationFrame((time) => this.animation(time));  
   }

@@ -12,6 +12,9 @@ class Jeu {
     this.score;
     this.audio = {};
     this.listeCouleur = [];
+    this.niveauDeJeu =1;
+    this.timer =0;
+    this.valTimer = 1000;
   }
 
   creerCouleur(){
@@ -70,24 +73,42 @@ class Jeu {
     plateau.draw();
     this.plateau = plateau;
   }
-
-  creerBalles() {
-    let nbBalles = 3;
+  checkNiveau(time)
+  {
+    if(this.timer == this.valTimer){
+      this.niveauDeJeu++;
+      this.valTimer += 1000; 
+    }
+    this.canvas = document.querySelector(this.selecteur);
+    this.context = this.canvas.getContext('2d');
+    this.context.save();
+    this.context.beginPath();
+    this.context.translate(20, 25);
+    this.context.fillStyle = "white";
+    this.context.font = "20px Arial";
+    this.context.fillText("NIVEAU : "+this.niveauDeJeu, 0, 0);
+    this.context.restore();
+    
+    console.log("checkNiveau" + this.niveauDeJeu);
+  }
+  creerBalles(nbBalles,niveau) {
+    nbBalles =3;
+    if(this.niveauDeJeu != 1) nbBalles =nbBalles + this.niveauDeJeu - (this.niveauDeJeu-1);
     for(let i = 0; i < nbBalles; i++) {
-      let x = Math.random() * this.canvas.width;
-      let y = Math.floor(Math.random() * (this.plateau.y - (this.briques[this.briques.length - 1].y + 30) + 1)  + (this.briques[this.briques.length - 1].y + 30));
-      let rayon = 8;
-      let R = Math.round(255 * Math.random());
+    let x = Math.random() * this.canvas.width; 
+    let y = Math.floor(Math.random() * (this.plateau.y - (this.briques[this.briques.length - 1].y + 30) + 1)  + (this.briques[this.briques.length - 1].y + 30));;
+    let rayon = 8; 
+    let R = Math.round(255 * Math.random());
       let G = Math.round(255 * Math.random());
       let B = Math.round(255 * Math.random());
       let couleur = "rgb(" + R + "," + G + "," + B +")";
-      let vx = 1 + Math.random() * 3;
-      let vy = 1 + Math.random() * 3;
-      const balle = new Balle(x, y, rayon, this.context, couleur, vx, vy);
-      balle.draw();
-      /* On le mets dans le tableaux de balles */
-      this.balles.push(balle);
-    }
+    let vx = 1+ Math.random() *5; 
+    let vy = 1+ Math.random() *5;
+    
+    let balle = new Balle(x, y, rayon, this.context, couleur, vx, vy);
+    this.balles.push(balle);
+  }
+    
   }
 
   partieTerminer() {
@@ -112,10 +133,11 @@ class Jeu {
     this.canvas = document.querySelector(this.selecteur);
     this.context = this.canvas.getContext('2d');
     this.score = new Score(this.context, 1);
+  
     this.creerCouleur();
     this.creerPlateau();
     this.creerBriques();
-    this.creerBalles();
+    this.creerBalles(3);
     this.creerTaquet();
     this.increment = 0;
     this.score.draw();
@@ -131,7 +153,7 @@ class Jeu {
   }
 
   animation(time) {
-
+    this.timer++;
     this.fps.measureFPS(time);
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.briques.map(brique => {
@@ -140,25 +162,17 @@ class Jeu {
     this.plateau.draw();
     this.taquet.draw();
     this.score.draw();
+    console.log(this.valTimer + "this.valTimer");
+    
     this.deplacerBalles();
-    if(this.increment === 200) {
-      let x = Math.random() * this.canvas.width;
-      let y = Math.floor(Math.random() * (this.plateau.y - (this.briques[this.briques.length - 1].y + 30) + 1)  + (this.briques[this.briques.length - 1].y + 30));
-      let rayon = 8;
-      let R = Math.round(255 * Math.random());
-      let G = Math.round(255 * Math.random());
-      let B = Math.round(255 * Math.random());
-      let couleur = "rgb(" + R + "," + G + "," + B +")";
-      let vx = 1 + Math.random() * 3;
-      let vy = 1 + Math.random() * 3;
-      const balle = new Balle(x, y, rayon, this.context, couleur, vx, vy);
-      /* On le mets dans le tableaux de balles */
-      this.balles.push(balle);
-      this.increment = 0;
+    if(this.balles.length < 2 && this.briques.length != 0) {
+     this.creerBalles(3);
     };
     // tester si la partie est terminer
     this.partieTerminer();
+    this.checkNiveau(this.valTimer);
     this.increment++;
+   
     requestAnimationFrame((time) => this.animation(time));  
   }
 
